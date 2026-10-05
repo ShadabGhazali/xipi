@@ -1,0 +1,6 @@
+FROM python:3.11-slim
+WORKDIR /app
+RUN pip install --no-cache-dir fastapi uvicorn pydantic
+COPY mock_devops_api.py .
+RUN mkdir -p results
+CMD ["python", "mock_devops_api.py"]

@@ -1,0 +1,63 @@
+version: "3.9"
+
+services:
+  # ── Primary vector store ──────────────────────────────────────
+  qdrant:
+    image: qdrant/qdrant:v1.9.4
+    container_name: xipi-qdrant
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    environment:
+      QDRANT__SERVICE__API_KEY: xipi-local-secret
+    volumes:
+      - qdrant_storage:/qdrant/storage
+    restart: unless-stopped
+
+  # ── Secondary vector store (replication validation) ───────────
+  chroma:
+    image: chromadb/chroma:0.5.3
+    container_name: xipi-chroma
+    ports:
+      - "8010:8000"
+    volumes:
+      - chroma_storage:/chroma/chroma
+    restart: unless-stopped
+
+  # ── Mock HR Payroll API ───────────────────────────────────────
+  hr-api:
+    build:
+      context: ./infra
+      dockerfile: Dockerfile.hr
+    container_name: xipi-hr-api
+    ports:
+      - "8001:8001"
+    environment:
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./results:/app/results
+    restart: unless-stopped
+
+  # ── Mock DevOps Pipeline API ──────────────────────────────────
+  devops-api:
+    build:
+      context: ./infra
+      dockerfile: Dockerfile.devops
+    container_name: xipi-devops-api
+    ports:
+      - "8002:8002"
+    volumes:
+      - ./results:/app/results
+    restart: unless-stopped
+
+  # ── Attacker webhook listener (exfiltration target) ───────────
+  webhook-listener:
+    image: mendhak/http-https-echo:34
+    container_name: xipi-webhook
+    ports:
+      - "9999:8080"
+    restart: unless-stopped
+
+volumes:
+  qdrant_storage:
+  chroma_storage:

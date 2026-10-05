@@ -1,0 +1,22 @@
+# Additional keyword patterns for the 340-pattern filter baseline.
+# One regex pattern per line. Lines starting with # are comments.
+# These supplement the core patterns hardcoded in evaluation/keyword_filter.py.
+
+# Additional directive keywords
+\bNEW\s+INSTRUCTION\b
+\bUPDATED\s+SYSTEM\s+PROMPT\b
+\bREPLACE\s+INSTRUCTIONS\b
+\bEND\s+PREVIOUS\s+CONTEXT\b
+\bSYSTEM\s+UPDATE\s+REQUIRED\b
+
+# Additional code injection patterns
+\bimport\s+subprocess\b
+\bimport\s+os\b.*\bos\.system\b
+\b__import__\s*\(
+\bgetattr\s*\(.*__
+
+# Exfiltration patterns
+\battacker\.\w+\b
+\bexfil\b
+\bdata_leak\b
+\bsend_to_attacker\b
