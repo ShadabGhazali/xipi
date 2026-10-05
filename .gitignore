@@ -1,0 +1,28 @@
+# Local credentials and environment overrides
+.env
+.env.*
+!.env.example
+
+# Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+
+# Generated experiment outputs and downloaded model artifacts
+results/
+models/
+.cache/
+data/benign_chunks.jsonl
+data/adversarial_payloads.jsonl
+
+# Local editor and operating system files
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
